@@ -14,3 +14,9 @@ models/*
 !models/.gitkeep
 reports/figures/*
 !reports/figures/.gitkeep
+
+.pytest_cache/
+*.db
+submission.csv
+reports/*.csv
+index/

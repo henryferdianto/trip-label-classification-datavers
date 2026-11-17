@@ -14,6 +14,7 @@ def haversine(lat1, lon1, lat2, lon2):
 
 
 def build(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
     if {"pickup_lat", "pickup_lon", "dropoff_lat", "dropoff_lon"} <= set(df.columns):
         df["distance_km"] = haversine(
             df.pickup_lat, df.pickup_lon, df.dropoff_lat, df.dropoff_lon
@@ -21,5 +22,7 @@ def build(df: pd.DataFrame) -> pd.DataFrame:
     if "pickup_time" in df.columns:
         ts = pd.to_datetime(df["pickup_time"])
         df["hour"] = ts.dt.hour
-        df["weekday"] = ts.dt.weekday
+        df["weekday"] = ts.dt.day_of_week
+        df["is_peak"] = ((df["hour"] >= 17) & (df["hour"] <= 21)).astype(int)
+        df = df.drop(columns=["pickup_time"])
     return df
